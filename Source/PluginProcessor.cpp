@@ -14,24 +14,18 @@
 
 //==============================================================================
 TestOrfanidisBiquadAudioProcessor::TestOrfanidisBiquadAudioProcessor()
+    : gain      {nullptr},
+      frequency {nullptr},
+      bandwidth {nullptr}
 {
-    coeffs.calculateCoefficients(1,                 // reference gain at DC
-                                 2,                 // boost/cut gain
-                                 1.75,              // bandwidth gain
-                                 0.25 * double_Pi,  // center frequency in rads/sample
-                                 0.4 * double_Pi);  // bandwidth in rads/sample
+    addParameter (gain      = new AudioParameterFloat {"GainID",      "Gain",      -12.0f,  12.0f, 0.0f});
+    addParameter (frequency = new AudioParameterFloat {"FrequencyID", "Frequency",   0.0f,   1.0f, 0.5f});
+    addParameter (bandwidth = new AudioParameterFloat {"BandwidthID", "Bandwidth",   0.01f,  1.0f, 0.5f});
 
     xn_1.resize (8, 0); // state for up to 8 chans
     xn_2.resize (8, 0);
     yn_1.resize (8, 0);
     yn_2.resize (8, 0);
-
-    std::cout << coeffs.b0() << " "
-              << coeffs.b1() << " "
-              << coeffs.b2() << " "
-              << coeffs.a0() << " "
-              << coeffs.a1() << " "
-              << coeffs.a2() << "\n";
 }
 
 TestOrfanidisBiquadAudioProcessor::~TestOrfanidisBiquadAudioProcessor()
@@ -150,6 +144,13 @@ void TestOrfanidisBiquadAudioProcessor::processBlock (AudioSampleBuffer& buffer,
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
+
+    const double G  = Decibels::decibelsToGain ((double) *gain);
+    const double GB = Decibels::decibelsToGain (*gain - 3);    // this won't work??
+    const double w0 = *frequency * double_Pi;
+    const double Dw = *bandwidth * double_Pi;
+
+    coeffs.calculateCoefficients(1, G, GB, w0, Dw);
 
     const double b0 = coeffs.b0();
     const double b1 = coeffs.b1();

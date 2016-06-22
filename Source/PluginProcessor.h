@@ -58,6 +58,10 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+    AudioParameterFloat* gain;      // managedParameters owns
+    AudioParameterFloat* frequency;
+    AudioParameterFloat* bandwidth;
+
     OrfanidisCalc coeffs;
 
     std::vector<double> xn_1; // state for up to 8 chans

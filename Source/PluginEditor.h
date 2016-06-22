@@ -13,6 +13,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
+#include "ParameterSlider.h"
 
 
 //==============================================================================
@@ -29,6 +30,20 @@ public:
     void resized() override;
 
 private:
+    enum SymbolicIndexNames     // Allow use of symbolic names instead
+    {                           // of managedParameters indices.
+        gainName,               // Must have the same ordering as
+        frequencyName,              // processor's managedParameters!!!
+        bandwidthName
+    };
+
+    Label gainLabel_;
+    Label frequencyLabel_;
+    Label bandwidthLabel_;
+    ParameterSlider gainSlider_;
+    ParameterSlider frequencySlider_;
+    ParameterSlider bandwidthSlider_;
+
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     TestOrfanidisBiquadAudioProcessor& processor;

@@ -12,6 +12,8 @@
               pluginAAXCategory="AAX_ePlugInCategory_Dynamics" jucerVersion="4.2.1">
   <MAINGROUP id="axrycH" name="TestOrfanidisBiquad">
     <GROUP id="{7B2B6AF3-9DCB-1943-C1E1-BA8213C7E28F}" name="Source">
+      <FILE id="gIdds5" name="ParameterSlider.h" compile="0" resource="0"
+            file="Source/ParameterSlider.h"/>
       <FILE id="j09niY" name="OrfanidisCalc.h" compile="0" resource="0" file="Source/OrfanidisCalc.h"/>
       <FILE id="FcaS4h" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
