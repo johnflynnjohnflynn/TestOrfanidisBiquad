@@ -11,6 +11,8 @@
 #ifndef ORFANIDISCALC_H_INCLUDED
 #define ORFANIDISCALC_H_INCLUDED
 
+#include <cmath>
+
 
 //==============================================================================
 /**
@@ -19,6 +21,8 @@
     OrfanidisCalc c;
     c.calculateCoefficients (1, 2, 1.75, 0.25*pi, 0.4*pi);
     cout << c.b0() << c.b1() << c.b2() << c.a0() << c.a1() << c.a2() << endl;
+    
+    ---
 
     From the matlab/octave code...
 
@@ -85,7 +89,7 @@ public:
         const double F   = std::abs (G*G   - GB*GB);
         const double G00 = std::abs (G*G   - G0*G0);
         const double F00 = std::abs (GB*GB - G0*G0);
-        const double pi  = double_Pi; // double precision pi constant from Juce
+        const double pi  = 3.1415926535897932384626433832795; // double precision pi
 
         const double num = G0*G0 * std::pow (w0*w0 - pi*pi, 2) + G*G * F00 * pi*pi * Dw*Dw / F;
         const double den = std::pow (w0*w0 - pi*pi, 2) + F00 * pi*pi * Dw*Dw / F;
@@ -122,9 +126,6 @@ private:
     double a1_ {0};
     double a2_ {0};
 
-
-    //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OrfanidisCalc)
 };
 
 
