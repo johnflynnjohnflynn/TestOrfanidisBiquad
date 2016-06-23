@@ -18,7 +18,7 @@ TestOrfanidisBiquadAudioProcessor::TestOrfanidisBiquadAudioProcessor()
       frequency {nullptr},
       bandwidth {nullptr}
 {
-    addParameter (gain      = new AudioParameterFloat {"GainID",      "Gain",      -12.0f,  12.0f, 0.0f});
+    addParameter (gain      = new AudioParameterFloat {"GainID",      "Gain",      -36.0f,  36.0f, 0.0f});
     addParameter (frequency = new AudioParameterFloat {"FrequencyID", "Frequency",   0.0f,   1.0f, 0.5f});
     addParameter (bandwidth = new AudioParameterFloat {"BandwidthID", "Bandwidth",   0.01f,  1.0f, 0.5f});
 
@@ -95,6 +95,8 @@ void TestOrfanidisBiquadAudioProcessor::prepareToPlay (double sampleRate, int sa
 	xn_2.assign(8, 0);
 	yn_1.assign(8, 0);
 	yn_2.assign(8, 0);
+
+       coeffs.setRate (sampleRate);
 }
 
 void TestOrfanidisBiquadAudioProcessor::releaseResources()
@@ -146,11 +148,13 @@ void TestOrfanidisBiquadAudioProcessor::processBlock (AudioSampleBuffer& buffer,
     // audio processing...
 
     const double G  = Decibels::decibelsToGain ((double) *gain);
-    const double GB = Decibels::decibelsToGain (*gain - 3);    // this won't work??
-    const double w0 = *frequency * double_Pi;
-    const double Dw = *bandwidth * double_Pi;
+   // const double GB = Decibels::decibelsToGain (*gain / 2);
+   // const double w0 = *frequency * double_Pi;
+   // const double Dw = std::pow (1.0/0.1, (double) *bandwidth) * double_Pi;
 
-    coeffs.calculateCoefficients(1, G, GB, w0, Dw);
+   // std::cout << Dw << "\n";
+
+    coeffs.calculate(G, *frequency, *bandwidth);
 
     const double b0 = coeffs.b0();
     const double b1 = coeffs.b1();

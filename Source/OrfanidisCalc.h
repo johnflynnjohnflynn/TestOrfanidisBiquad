@@ -83,13 +83,27 @@ public:
     double a1() { return a1_; };
     double a2() { return a2_; };
 
+    void setRate (double newSampleRate)
+    {
+        jassert (newSampleRate > 0);
+        samplerate = newSampleRate;
+    }
+
+    void calculate (double gain, double frequency, double bandwidth)
+    {
+        const double hzFrequency = linToHz (frequency);
+        const double radSampFrequency = hzToRadPerSamp (hzFrequency);
+        const double radSampBandwidth = bandwidth * radSampFrequency;
+
+        calculateCoefficients (1, gain, gain/2., radSampFrequency, radSampBandwidth);
+    }
+
     //==============================================================================
     void calculateCoefficients (double G0, double G, double GB, double w0, double Dw)
     {
         const double F   = std::abs (G*G   - GB*GB);
         const double G00 = std::abs (G*G   - G0*G0);
         const double F00 = std::abs (GB*GB - G0*G0);
-        const double pi  = 3.1415926535897932384626433832795; // double precision pi
 
         const double num = G0*G0 * std::pow (w0*w0 - pi*pi, 2) + G*G * F00 * pi*pi * Dw*Dw / F;
         const double den = std::pow (w0*w0 - pi*pi, 2) + F00 * pi*pi * Dw*Dw / F;
@@ -117,6 +131,17 @@ public:
         a2_ = (1 + W2 - A) / (1 + W2 + A);
     }
 
+    double linToHz (double lin)
+    {
+        jassert (0 <= lin && lin <= 1);
+        return 20 * std::pow (10, 3 * lin); // 3 decades in freq scale
+    }
+
+    double hzToRadPerSamp (double hz)
+    {
+        jassert (0 <= hz && hz <= (samplerate / 2));
+        return hz * ((2 * pi) / samplerate);
+    }
 
 private:
     double b0_ {0};  // filter transfer function coefficients
@@ -125,6 +150,10 @@ private:
     double a0_ {0};
     double a1_ {0};
     double a2_ {0};
+
+    double samplerate {0};
+
+    const double pi {3.1415926535897932384626433832795}; // double precision pi
 
 };
 
