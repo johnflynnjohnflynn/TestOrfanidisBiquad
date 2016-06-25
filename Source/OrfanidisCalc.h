@@ -83,19 +83,39 @@ public:
     double a1() { return a1_; };
     double a2() { return a2_; };
 
-    void setRate (double newSampleRate)
+    void setRate (double newSampleRate)                 // this needs to be set, or does it?!
     {
         jassert (newSampleRate > 0);
         samplerate = newSampleRate;
     }
 
-    void calculate (double gain, double frequency, double bandwidth)
+    double linToHz (double lin)
     {
+        jassert (0 <= lin && lin <= 1);
+        return 20 * std::pow (10, 3 * lin); // 3 decades in freq scale
+    }
+
+    double hzToRadPerSamp (double hz)
+    {
+        jassert (0 <= hz && hz <= (samplerate / 2));    // is there a way to do without setting samplerate?
+        return hz * ((2 * pi) / samplerate);
+    }
+
+    void calculate (double gain, double frequency, double q)
+    {
+        const double gainLin  = Decibels::decibelsToGain (gain);
+        const double bandwidthGain = Decibels::decibelsToGain (gain / std::sqrt (2));
         const double hzFrequency = linToHz (frequency);
         const double radSampFrequency = hzToRadPerSamp (hzFrequency);
-        const double radSampBandwidth = bandwidth * radSampFrequency;
+        const double radSampBandwidth = (radSampFrequency / q);
 
-        calculateCoefficients (1, gain, gain/2., radSampFrequency, radSampBandwidth);
+        std::cout << "gainLin          " << gainLin << "\n"                                 // debug
+                  << "bandwidthGain    " << bandwidthGain << "\n"
+                  << "hzFrequency      " << hzFrequency << "\n"
+                  << "radSampFrequency " << radSampFrequency << "\n"
+                  << "radSampBandwidth " << radSampBandwidth << "\n";
+
+        calculateCoefficients (1, gainLin, bandwidthGain, radSampFrequency, radSampBandwidth);
     }
 
     //==============================================================================
@@ -131,23 +151,10 @@ public:
         a2_ = (1 + W2 - A) / (1 + W2 + A);
     }
 
-    double linToHz (double lin)
-    {
-        jassert (0 <= lin && lin <= 1);
-        return 20 * std::pow (10, 3 * lin); // 3 decades in freq scale
-    }
-
-    double hzToRadPerSamp (double hz)
-    {
-        jassert (0 <= hz && hz <= (samplerate / 2));
-        return hz * ((2 * pi) / samplerate);
-    }
-
 private:
     double b0_ {0};  // filter transfer function coefficients
     double b1_ {0};
     double b2_ {0};
-    double a0_ {0};
     double a1_ {0};
     double a2_ {0};
 

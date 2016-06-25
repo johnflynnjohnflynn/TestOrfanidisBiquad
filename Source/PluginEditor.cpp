@@ -15,9 +15,9 @@
 //==============================================================================
 TestOrfanidisBiquadAudioProcessorEditor::TestOrfanidisBiquadAudioProcessorEditor (TestOrfanidisBiquadAudioProcessor& p)
     : AudioProcessorEditor (&p), 
-      gainLabel_       {String::empty, "Gain in dB"}, // (No component name, just set label text)
-      frequencyLabel_  {String::empty, "Frequency in pi*rad/s"},
-      bandwidthLabel_  {String::empty, "Bandwidth at Gain/2 point"},
+      gainLabel_       {String::empty, "Gain"}, // (No component name, just set label text)
+      frequencyLabel_  {String::empty, "Frequency"},
+      bandwidthLabel_  {String::empty, "Q"},
       gainSlider_      {*p.getParameters()[gainName]},
       frequencySlider_ {*p.getParameters()[frequencyName]},
       bandwidthSlider_ {*p.getParameters()[bandwidthName]},
