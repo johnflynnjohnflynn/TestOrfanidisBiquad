@@ -18,9 +18,9 @@ TestOrfanidisBiquadAudioProcessor::TestOrfanidisBiquadAudioProcessor()
       frequency {nullptr},
       bandwidth {nullptr}
 {
-    addParameter (gain      = new AudioParameterFloat {"GainID",      "Gain",      -36.0f,  36.0f, 6.0f});
+    addParameter (gain      = new AudioParameterFloat {"GainID",      "Gain",      -36.0f,  36.0f, 0.0f});
     addParameter (frequency = new AudioParameterFloat {"FrequencyID", "Frequency",   0.0f,   1.0f, 0.5f});
-    addParameter (bandwidth = new AudioParameterFloat {"BandwidthID", "Bandwidth",   0.01f,  6.0f, 0.707f});
+    addParameter (bandwidth = new AudioParameterFloat {"BandwidthID", "Bandwidth",   0.03f,  6.0f, 0.707f});
 
     xn_1.resize (8, 0); // state for up to 8 chans
     xn_2.resize (8, 0);
