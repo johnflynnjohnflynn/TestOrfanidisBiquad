@@ -83,7 +83,7 @@ public:
     double a1() { return a1_; };
     double a2() { return a2_; };
 
-    void setRate (double newSampleRate)                 // this needs to be set, or does it?!
+    void setRate (double newSampleRate)
     {
         jassert (newSampleRate > 0);
         samplerate = newSampleRate;
@@ -97,7 +97,7 @@ public:
 
     double hzToRadPerSamp (double hz)
     {
-        jassert (0 <= hz && hz <= (samplerate / 2));    // is there a way to do without setting samplerate?
+        jassert (0 <= hz && hz <= (samplerate / 2));
         return hz * ((2 * pi) / samplerate);
     }
 
