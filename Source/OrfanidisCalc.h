@@ -104,10 +104,10 @@ public:
     void calculate (double gain, double frequency, double q)
     {
         const double gainLin  = Decibels::decibelsToGain (gain);
-        const double bandwidthGain = Decibels::decibelsToGain (gain / std::sqrt (2));
+        const double bandwidthGain = Decibels::decibelsToGain (gain / root2);
         const double hzFrequency = linToHz (frequency);
         const double radSampFrequency = hzToRadPerSamp (hzFrequency);
-        const double radSampBandwidth = radSampFrequency / (1.588308819 * q);
+        const double radSampBandwidth = radSampFrequency / (1.588308819 * q); // q scaling factor 1.58...
 
         String str;
         str << "gainLin          " << gainLin << "\n"                                 // debug
@@ -161,8 +161,9 @@ private:
     double a2_ {0};
 
     double samplerate {0};
-
-    const double pi {3.1415926535897932384626433832795}; // double precision pi
+    
+    const double pi    {3.141592653589793115997963468544185161590576171875};
+    const double root2 {1.4142135623730951454746218587388284504413604736328125};
 
 };
 
