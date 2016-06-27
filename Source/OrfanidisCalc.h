@@ -107,13 +107,15 @@ public:
         const double bandwidthGain = Decibels::decibelsToGain (gain / std::sqrt (2));
         const double hzFrequency = linToHz (frequency);
         const double radSampFrequency = hzToRadPerSamp (hzFrequency);
-        const double radSampBandwidth = (radSampFrequency / q);
+        const double radSampBandwidth = radSampFrequency / (1.588308819 * q);
 
-        std::cout << "gainLin          " << gainLin << "\n"                                 // debug
-                  << "bandwidthGain    " << bandwidthGain << "\n"
-                  << "hzFrequency      " << hzFrequency << "\n"
-                  << "radSampFrequency " << radSampFrequency << "\n"
-                  << "radSampBandwidth " << radSampBandwidth << "\n";
+        String str;
+        str << "gainLin          " << gainLin << "\n"                                 // debug
+            << "bandwidthGain    " << bandwidthGain << "\n"
+            << "hzFrequency      " << hzFrequency << "\n"
+            << "radSampFrequency " << radSampFrequency << "\n"
+            << "radSampBandwidth " << radSampBandwidth << "\n";
+        Logger::outputDebugString (str);
 
         calculateCoefficients (1, gainLin, bandwidthGain, radSampFrequency, radSampBandwidth);
     }
