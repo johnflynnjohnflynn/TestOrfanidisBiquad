@@ -161,6 +161,8 @@ void TestOrfanidisBiquadAudioProcessor::processBlock (AudioSampleBuffer& buffer,
     {
         for (int c = 0; c < totalNumInputChannels; ++c)
         {
+            yn[c][s] += denormal;
+
             const double xn = static_cast<double> (yn[c][s]); // perform calcs at double
 
                                           // direct form 1
